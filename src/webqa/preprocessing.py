@@ -42,6 +42,7 @@ def build_chunks(
     pages: list[PageDocument],
     chunk_size: int = 180,
     chunk_overlap: int = 40,
+    min_chunk_length: int = 20,
 ) -> list[TextChunk]:
     all_chunks: list[TextChunk] = []
 
@@ -51,6 +52,10 @@ def build_chunks(
         segments = chunk_words(text, chunk_size=chunk_size, chunk_overlap=chunk_overlap)
 
         for seg_idx, seg in enumerate(segments):
+            # Skip chunks that are too small (noise filtering)
+            if len(seg.split()) < min_chunk_length:
+                continue
+
             all_chunks.append(
                 TextChunk(
                     chunk_id=f"doc{page_idx}_chunk{seg_idx}",

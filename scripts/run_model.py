@@ -25,14 +25,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--mode",
         type=str,
-        default="extractive",
+        default="generative",
         choices=["extractive", "generative"],
         help="Answering mode.",
     )
-    parser.add_argument("--top-k", type=int, default=4, help="Retrieved chunks count.")
+    parser.add_argument("--top-k", type=int, default=6, help="Retrieved chunks count.")
     parser.add_argument("--timeout-seconds", type=int, default=20)
     parser.add_argument("--chunk-size", type=int, default=SETTINGS.chunk_size)
     parser.add_argument("--chunk-overlap", type=int, default=SETTINGS.chunk_overlap)
+    parser.add_argument("--max-pages", type=int, default=SETTINGS.crawl_max_pages)
+    parser.add_argument("--max-depth", type=int, default=SETTINGS.crawl_max_depth)
+    parser.add_argument("--throttle-every", type=int, default=20, help="Pause after this many fetched pages.")
+    parser.add_argument("--sleep-seconds", type=int, default=5, help="Seconds to sleep when throttling.")
     return parser.parse_args()
 
 
@@ -57,6 +61,10 @@ def main() -> None:
                 timeout_seconds=args.timeout_seconds,
                 chunk_size=args.chunk_size,
                 chunk_overlap=args.chunk_overlap,
+                max_pages=args.max_pages,
+                max_depth=args.max_depth,
+                    throttle_every=args.throttle_every,
+                    sleep_seconds=args.sleep_seconds,
             )
         except ValueError as exc:
             print(f"Ingestion failed: {exc}")

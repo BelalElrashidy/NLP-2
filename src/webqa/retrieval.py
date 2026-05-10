@@ -71,7 +71,7 @@ class HybridRetriever:
         retriever.index = faiss.read_index(str(index_path))
         return retriever
 
-    def retrieve(self, question: str, top_k: int = 4, alpha: float = 0.6) -> list[RetrievalResult]:
+    def retrieve(self, question: str, top_k: int = 6, alpha: float = 0.25) -> list[RetrievalResult]:
         if self.index is None or self.bm25 is None:
             raise ValueError("Retriever is not initialized. Run ingest first.")
 
@@ -88,7 +88,9 @@ class HybridRetriever:
             if idx >= 0:
                 results[idx] = float(alpha * score)
 
-        for idx in np.argsort(bm25_scores)[-top_k:]:
+        # Widen BM25 candidate pool so keyword-relevant chunks aren't missed
+        bm25_top_k = top_k * 3
+        for idx in np.argsort(bm25_scores)[-bm25_top_k:]:
             prev = results.get(int(idx), 0.0)
             results[int(idx)] = prev + float((1 - alpha) * bm25_scores[idx])
 

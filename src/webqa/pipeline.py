@@ -21,8 +21,25 @@ class WebsiteQAPipeline:
         self.extractive_qa: ExtractiveQA | None = None
         self.generative_qa: GenerativeQA | None = None
 
-    def ingest(self, urls: list[str], timeout_seconds: int, chunk_size: int, chunk_overlap: int) -> tuple[int, int, int]:
-        pages = collect_pages(urls=urls, timeout_seconds=timeout_seconds)
+    def ingest(
+        self,
+        urls: list[str],
+        timeout_seconds: int,
+        chunk_size: int,
+        chunk_overlap: int,
+        max_pages: int = 150,
+        max_depth: int = 3,
+        throttle_every: int = 20,
+        sleep_seconds: int = 5,
+    ) -> tuple[int, int, int]:
+        pages = collect_pages(
+            urls=urls,
+            timeout_seconds=timeout_seconds,
+            max_pages=max_pages,
+            max_depth=max_depth,
+            throttle_every=throttle_every,
+            sleep_seconds=sleep_seconds,
+        )
         if not pages:
             raise ValueError("No pages were collected from the provided URLs.")
         save_pages(self.settings.raw_pages_path, pages)
@@ -57,14 +74,26 @@ class WebsiteQAPipeline:
             self.generative_qa = GenerativeQA(self.settings.gemini_model)
         return self.generative_qa
 
-    def ask(self, question: str, mode: str = "extractive", top_k: int = 4) -> PipelineAnswer:
+    def ask(self, question: str, mode: str = "generative", top_k: int = 6) -> PipelineAnswer:
         retriever = self._ensure_retriever()
         retrieved = retriever.retrieve(question, top_k=top_k)
-        contexts = [r.chunk.text for r in retrieved]
+
+        # Build rich context: include title and header hints for better grounding
+        contexts = []
+        for r in retrieved:
+            parts = []
+            if r.chunk.title:
+                parts.append(f"العنوان: {r.chunk.title}")
+            if r.chunk.header_hint:
+                parts.append(f"القسم: {r.chunk.header_hint}")
+            parts.append(r.chunk.text)
+            contexts.append("\n".join(parts))
 
         if mode == "extractive":
+            # Extractive mode: pass raw text only (model constraint)
+            raw_contexts = [r.chunk.text for r in retrieved]
             extractive = self._ensure_extractive()
-            answer, score = extractive.answer(question=question, contexts=contexts)
+            answer, score = extractive.answer(question=question, contexts=raw_contexts)
             return PipelineAnswer(answer=answer, confidence=score, sources=retrieved)
 
         generative = self._ensure_generative()

@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Small design tokens to match ChatGPT-like dark theme */
+:root{
+  --bg:#0b1220;
+}
+
+html,body,#___next{height:100%}
+body{@apply bg-[#0b1220] text-slate-100 font-sans}
+
+.chat-container{max-width:900px;margin:40px auto;padding:20px}
+.panel{@apply bg-[#0f1724] rounded-2xl shadow-lg p-6}
+
+.prompt-input{@apply w-full min-h-[120px] p-4 rounded-lg bg-[#071028] border border-slate-700 text-slate-100}
+.btn-primary{@apply bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md}
+.btn-muted{@apply bg-transparent border border-slate-700 text-slate-200 py-2 px-3 rounded-lg}
+
+.answer-bubble{@apply bg-[#061224] border border-slate-800 rounded-lg p-4 text-slate-100}
+.source-card{@apply bg-[#071028] border border-slate-800 rounded-md p-3}

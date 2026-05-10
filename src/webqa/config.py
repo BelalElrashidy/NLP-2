@@ -10,9 +10,11 @@ class Settings:
     metadata_path: Path = Path("data/index/metadata.pkl")
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     extractive_model: str = "sshleifer/tiny-distilbert-base-cased-distilled-squad"
-    gemini_model: str = "gemini-2.0-flash"
+    gemini_model: str = "gemini-2.5-flash"
     chunk_size: int = 180
     chunk_overlap: int = 40
+    crawl_max_pages: int = 500
+    crawl_max_depth: int = 3
 
 
 SETTINGS = Settings()

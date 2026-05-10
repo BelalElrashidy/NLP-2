@@ -1,9 +1,2 @@
-https://gate.ahram.org.eg/
-https://m.gomhuriaonline.com/
-https://www.azhar.eg/splash.html
-https://www.dar-alifta.org/home.html
-https://www.islamweb.net/ar/
-https://www.egyptair.com/en/pages/HomePage.aspx
-https://study-in-egypt.gov.eg/
-https://www.egypttoday.com/
-https://grandegyptianmuseum.org/
+https://www.islamweb.net/ar/articles/
+https://fatwatok.islamweb.net/
