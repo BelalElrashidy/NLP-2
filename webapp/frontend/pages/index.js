@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 function Spinner() {
   return (
@@ -66,14 +68,23 @@ export default function Home() {
               <div className="answer-bubble">Error: {result.error}</div>
             ) : (
               <>
-                <div className="answer-bubble">{result.answer}</div>
-                <div className="mt-3 text-sm text-slate-400">Confidence: <strong className="text-white">{result.confidence ?? '—'}</strong></div>
+                <section className="answer-shell" dir="rtl">
+                  <div className="answer-label">الإجابة</div>
+                  <div className="answer-bubble prose prose-invert prose-slate max-w-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{result.answer}</ReactMarkdown>
+                  </div>
+                </section>
+
+                <div className="mt-3 text-sm text-slate-400 answer-meta" dir="rtl">
+                  <span>درجة الثقة:</span>
+                  <strong className="text-white">{result.confidence ?? '—'}</strong>
+                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                   {result.sources && result.sources.length ? result.sources.map((s,i)=>(
-                    <div key={i} className="source-card">
-                      <div className="font-semibold text-sm text-white">{s.title || 'Source'}</div>
-                      <a className="text-slate-400 text-xs break-words" href={s.url} target="_blank" rel="noreferrer">{s.url}</a>
+                    <div key={i} className="source-card" dir="rtl">
+                      <div className="source-title">{s.title || 'Source'}</div>
+                      <a className="source-url" href={s.url} target="_blank" rel="noreferrer">{s.url}</a>
                       <div className="mt-2 text-xs"><span className="inline-block bg-slate-700 text-white px-2 py-1 rounded-full">{(s.score||0).toFixed(3)}</span></div>
                     </div>
                   )) : <div className="text-slate-400">No sources returned.</div>}

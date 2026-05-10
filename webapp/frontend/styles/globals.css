@@ -2,20 +2,124 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Small design tokens to match ChatGPT-like dark theme */
-:root{
-  --bg:#0b1220;
+:root {
+  --bg: #0b1220;
+  --panel: rgba(12, 18, 32, 0.88);
+  --panel-border: rgba(148, 163, 184, 0.16);
+  --text: #e5eefc;
+  --muted: #93a4bf;
 }
 
-html,body,#___next{height:100%}
-body{@apply bg-[#0b1220] text-slate-100 font-sans}
+html,
+body,
+#___next {
+  height: 100%;
+}
 
-.chat-container{max-width:900px;margin:40px auto;padding:20px}
-.panel{@apply bg-[#0f1724] rounded-2xl shadow-lg p-6}
+body {
+  @apply text-slate-100;
+  background:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.16), transparent 30%),
+    radial-gradient(circle at top right, rgba(168, 85, 247, 0.14), transparent 28%),
+    linear-gradient(180deg, #07101d 0%, #0b1220 100%);
+  font-family: Inter, "Noto Sans Arabic", "Segoe UI", sans-serif;
+}
 
-.prompt-input{@apply w-full min-h-[120px] p-4 rounded-lg bg-[#071028] border border-slate-700 text-slate-100}
-.btn-primary{@apply bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md}
-.btn-muted{@apply bg-transparent border border-slate-700 text-slate-200 py-2 px-3 rounded-lg}
+.chat-container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 18px 48px;
+}
 
-.answer-bubble{@apply bg-[#061224] border border-slate-800 rounded-lg p-4 text-slate-100}
-.source-card{@apply bg-[#071028] border border-slate-800 rounded-md p-3}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px);
+  padding: 28px;
+}
+
+.prompt-input {
+  @apply w-full min-h-[140px] p-4 rounded-2xl bg-[#071020] border border-slate-700 text-slate-100;
+  line-height: 1.9;
+  resize: vertical;
+}
+
+.prompt-input::placeholder {
+  color: #64748b;
+}
+
+.btn-primary {
+  @apply bg-gradient-to-r from-cyan-500 to-violet-600 text-white font-semibold py-2.5 px-4 rounded-xl shadow-md;
+}
+
+.btn-muted {
+  @apply bg-transparent border border-slate-700 text-slate-200 py-2.5 px-4 rounded-xl;
+}
+
+.answer-shell {
+  margin-top: 24px;
+}
+
+.answer-label {
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+
+.answer-bubble {
+  @apply bg-[#071020] border border-slate-800 rounded-2xl p-5 text-slate-100;
+  line-height: 2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.answer-bubble :is(p, ul, ol, blockquote, pre) {
+  margin-top: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.answer-bubble :is(ul, ol) {
+  padding-inline-start: 1.4rem;
+}
+
+.answer-bubble li {
+  margin-top: 0.45rem;
+}
+
+.answer-bubble strong {
+  color: #f8fbff;
+}
+
+.answer-bubble blockquote {
+  border-inline-start: 3px solid rgba(34, 211, 238, 0.5);
+  padding-inline-start: 1rem;
+  color: #cbd5e1;
+}
+
+.answer-meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.source-card {
+  @apply bg-[#071028] border border-slate-800 rounded-2xl p-4;
+}
+
+.source-title {
+  @apply font-semibold text-sm text-white;
+  line-height: 1.6;
+}
+
+.source-url {
+  @apply text-slate-400 text-xs break-words block mt-1;
+  direction: ltr;
+  text-align: left;
+}
+
+.source-card:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+}
