@@ -130,7 +130,8 @@ class GenerativeQA:
                             "Gemini quota exhausted after retries. "
                             "Set WEBQA_ENABLE_LOCAL_FALLBACK=true to allow local fallback generation."
                         )
-                except GoogleAPICallError:
+                except GoogleAPICallError as e:
+                    print(f"[DEBUG] Gemini API error: {e}")
                     if not self.enable_local_fallback:
                         raise RuntimeError(
                             "Gemini request failed (API error). "
